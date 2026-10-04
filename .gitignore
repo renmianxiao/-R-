@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.npm-cache/
+data/orders.json
+data/users.json
+data/sessions.json
+data/points.json
+data/reviews.json
+data/uploads/
+data/*.tmp
+.env
+.env.*
+!.env.example
+*.log
+data/games.json

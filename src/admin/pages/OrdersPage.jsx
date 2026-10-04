@@ -1,0 +1,34 @@
+import { useEffect, useMemo, useState } from 'react';
+import { adminRequest } from '../admin-api.js';
+
+const statuses = { 'demo-created': ['待处理', 'pending'], processing: ['处理中', 'processing'], completed: ['已完成', 'complete'], cancelled: ['已取消', 'cancelled'] };
+const money = (value) => new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY', maximumFractionDigits: 2 }).format(Number(value) || 0);
+const date = (value) => { const parsed = new Date(value); return Number.isNaN(parsed.valueOf()) ? '—' : new Intl.DateTimeFormat('zh-CN', { dateStyle: 'medium', timeStyle: 'short' }).format(parsed); };
+
+function OrderDetail({ order, onClose, onUpdate, busy }) {
+  const [nextStatus, setNextStatus] = useState(order.status); const [error, setError] = useState('');
+  async function submit() { if (nextStatus === 'cancelled' && order.status !== 'cancelled' && !window.confirm('确认取消这笔演示订单？')) return; setError(''); try { await onUpdate(order, nextStatus); onClose(); } catch (e) { setError(e.message); } }
+  return <div className="admin-modal-backdrop" role="presentation" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}><section className="admin-order-dialog" role="dialog" aria-modal="true" aria-labelledby="order-detail-title"><header><div><p className="admin-section-eyebrow">ORDER / DEMO ONLY</p><h2 id="order-detail-title">订单详情</h2></div><button className="admin-icon-button" onClick={onClose} aria-label="关闭">×</button></header>
+    <div className="admin-order-ident"><strong>{order.orderId}</strong><span className={`admin-status-pill is-${statuses[order.status]?.[1] || 'pending'}`}><i />{statuses[order.status]?.[0] || order.status}</span></div><dl className="admin-order-meta"><div><dt>下单邮箱</dt><dd>{order.email || '—'}</dd></div><div><dt>下单时间</dt><dd>{date(order.createdAt)}</dd></div></dl>
+    <h3 className="admin-order-items-heading">商品明细 <span>{order.items?.length || 0} 件</span></h3><div className="admin-order-items">{(order.items || []).map((item, index) => <div key={`${item.id}-${index}`}><span><strong>{item.title || '未命名商品'}</strong><small>{item.quantity || 1} 件 × {money(item.unitPrice)}</small></span><b>{money((Number(item.unitPrice) || 0) * (Number(item.quantity) || 0))}</b></div>)}</div><div className="admin-order-total"><span>订单总额</span><strong>{money(order.total)}</strong></div>
+    <div className="admin-order-status-edit"><label>更新处理状态<select value={nextStatus} onChange={(e) => setNextStatus(e.target.value)}>{Object.entries(statuses).map(([value, [label]]) => <option value={value} key={value}>{label}</option>)}</select></label><button className="admin-primary-button" disabled={busy || nextStatus === order.status} onClick={submit}>{busy ? '正在更新…' : '更新状态'}<span>↗</span></button></div>
+    {order.statusUpdatedAt && <p className="admin-audit-note">最近更新：{date(order.statusUpdatedAt)} · {order.statusUpdatedBy || '管理员'}</p>}{error && <p className="admin-form-error" role="alert">{error}</p>}<p className="admin-demo-notice admin-order-demo-notice"><span>✳</span><span>演示订单不代表真实付款、配送或履约。</span></p>
+  </section></div>;
+}
+
+export default function OrdersPage() {
+  const [orders, setOrders] = useState([]); const [loading, setLoading] = useState(true); const [error, setError] = useState(''); const [query, setQuery] = useState(''); const [status, setStatus] = useState('all'); const [selected, setSelected] = useState(null); const [busy, setBusy] = useState(false);
+  async function load() { setLoading(true); setError(''); try { const result = await adminRequest('/api/admin/orders'); setOrders(result.orders || []); } catch (e) { setError(e.message); } finally { setLoading(false); } }
+  useEffect(() => { load(); }, []);
+  const filtered = useMemo(() => orders.filter((order) => (status === 'all' || order.status === status) && `${order.orderId} ${order.email}`.toLowerCase().includes(query.trim().toLowerCase())), [orders, query, status]);
+  async function update(order, nextStatus) { if (busy) return; setBusy(true); try { const { order: updated } = await adminRequest(`/api/admin/orders/${encodeURIComponent(order.orderId)}`, { method: 'PATCH', body: JSON.stringify({ status: nextStatus, expectedStatus: order.status }) }); setOrders((all) => all.map((row) => row.orderId === updated.orderId ? updated : row)); setSelected(updated); } finally { setBusy(false); } }
+  return <section className="admin-orders"><div className="admin-list-toolbar"><div><span className="admin-count-pill">{orders.filter((o) => o.status === 'demo-created').length} 待处理</span><span className="admin-muted-inline">共 {orders.length} 笔演示订单</span></div><button className="admin-refresh-button" onClick={load} disabled={loading}>↻ 刷新订单</button></div>
+    <div className="admin-filter-row"><label className="admin-search-field"><span aria-hidden="true">⌕</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="搜索订单号或邮箱" aria-label="搜索订单号或邮箱" /></label><label className="admin-select-field"><span>状态</span><select value={status} onChange={(e) => setStatus(e.target.value)}><option value="all">全部状态</option>{Object.entries(statuses).map(([value, [label]]) => <option value={value} key={value}>{label}</option>)}</select></label></div>
+    {error && <div className="admin-inline-error" role="alert">{error}<button onClick={load}>重试</button></div>}
+    <div className="admin-table-wrap"><table className="admin-table admin-orders-table"><thead><tr><th>订单号 / 时间</th><th>顾客邮箱</th><th>商品</th><th>金额</th><th>状态</th><th>详情</th></tr></thead><tbody>
+      {loading ? <tr><td colSpan="6" className="admin-table-message">正在载入订单…</td></tr> : filtered.map((order) => <tr key={order.orderId}><td><strong className="admin-order-id">{order.orderId}</strong><small className="admin-order-time">{date(order.createdAt)}</small></td><td>{order.email || '—'}</td><td><span className="admin-order-summary">{(order.items || []).map((item) => item.title).filter(Boolean).slice(0, 2).join('、') || '—'}{order.items?.length > 2 ? ` 等 ${order.items.length} 款` : ''}</span></td><td><strong className="admin-price">{money(order.total)}</strong></td><td><span className={`admin-status-pill is-${statuses[order.status]?.[1] || 'pending'}`}><i />{statuses[order.status]?.[0] || order.status}</span></td><td><button className="admin-detail-button" onClick={() => setSelected(order)}>查看订单 ↗</button></td></tr>)}
+      {!loading && !filtered.length && <tr><td colSpan="6" className="admin-table-message">{orders.length ? '没有匹配的订单，试试调整搜索或状态。' : '目前还没有演示订单。顾客完成演示下单后，订单会显示在这里。'}</td></tr>}
+    </tbody></table></div><div className="admin-orders-footnote"><span>演示订单 · 不发生真实付款</span><span>共 {filtered.length} 笔</span></div>
+    {selected && <OrderDetail key={selected.orderId} order={selected} onClose={() => setSelected(null)} onUpdate={update} busy={busy} />}
+  </section>;
+}

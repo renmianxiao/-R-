@@ -1,0 +1,43 @@
+.game-detail { padding-top: 30px; padding-bottom: 76px; }
+.detail-breadcrumb { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; color: #96958a; font-size: 12px; }
+.detail-breadcrumb a:hover { color: var(--lime); }
+.detail-hero { display: grid; grid-template-columns: minmax(200px, 300px) minmax(0, 1fr); gap: 48px; padding: 30px; border: 1px solid var(--line); border-radius: 8px; background: radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--detail-color) 15%, transparent), transparent 65%), #171714; }
+.detail-art { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 18px; }
+.game-detail .detail-cover { width: min(100%, 280px); aspect-ratio: 2 / 3; border-radius: 5px; border: 1px solid #ffffff20; box-shadow: 0 20px 50px #0006; }
+.detail-art-caption { color: #8d8b7f; font: 10px var(--mono); letter-spacing: .08em; text-align: center; }
+.detail-main { align-self: center; padding: 14px 0; }
+.detail-main h1 { margin: 20px 0 12px; color: #f0eee7; font-size: clamp(30px, 3.4vw, 52px); line-height: 1.18; letter-spacing: -.03em; }
+.detail-english { margin: 0 0 24px; color: #96958a; font: 13px var(--mono); }
+.detail-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.detail-chips span { padding: 7px 10px; border: 1px solid #ffffff17; border-radius: 3px; color: #b5b3a6; font-size: 11px; }
+.detail-chips .detail-rating { color: var(--lime); border-color: #d7f36a35; }
+.detail-summary { margin: 24px 0 30px; font-size: 16px; line-height: 1.9; color: #bab8ab; }
+.detail-buy { padding-top: 25px; border-top: 1px solid var(--line); }
+.detail-edition { color: #9e9d90; font-size: 12px; }
+.detail-price { display: flex; align-items: center; flex-wrap: wrap; gap: 15px; margin: 15px 0 24px; }
+.detail-price strong { color: var(--lime); font: 32px var(--mono); }
+.detail-price del { color: #828176; font: 13px var(--mono); }
+.detail-price > span { background: var(--lime); color: #202218; padding: 5px 8px; border-radius: 3px; font-size: 11px; }
+.detail-buttons { display: flex; flex-wrap: wrap; gap: 12px; }
+.detail-buttons .button { padding: 14px 20px; font-size: 13px; }
+.detail-buttons button[aria-pressed="true"] { color: var(--lime); border-color: #d7f36a66; }
+.detail-demo-note { margin-top: 16px; color: #79796f; font-size: 11px; }
+.detail-about { display: grid; grid-template-columns: 1.5fr 1fr; gap: 80px; margin: 65px 0; padding-bottom: 50px; border-bottom: 1px solid var(--line); }
+.game-detail h2 { margin: 12px 0 20px; color: #eeeade; font-size: 27px; }
+.detail-description { color: #b0aea2; font-size: 15px; line-height: 2; max-width: 680px; }
+.detail-about dl { margin: 0; }
+.detail-about dl > div { display: grid; grid-template-columns: 100px 1fr; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.detail-about dt { color: #858477; }.detail-about dd { margin: 0; color: #c7c5b7; line-height: 1.6; }
+.detail-related-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.detail-related-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 18px; }
+.detail-related-card { padding: 0; border: 0; color: #eeeade; background: transparent; text-align: left; cursor: pointer; }
+.detail-related-card .game-cover { aspect-ratio: 2 / 3; border-radius: 5px; }
+.detail-related-card > span { display: grid; gap: 9px; padding: 16px 0; }
+.detail-related-card strong { font-size: 15px; }.detail-related-card small { color: #909083; }.detail-related-card b { color: var(--lime); font: 14px var(--mono); }
+.detail-related-card:hover strong { color: var(--lime); }
+.detail-empty { min-height: 65vh; padding-top: 100px; padding-bottom: 80px; }.detail-empty h1 { font-size: 32px; }.detail-empty p { color: #aaa99d; }.detail-empty .button { margin-top: 20px; }
+@media (max-width: 900px) { .detail-hero { gap: 32px; padding: 25px; }.detail-about { gap: 35px; }.detail-related-grid { gap: 16px; } }
+@media (max-width: 680px) {
+  .detail-hero { grid-template-columns: 1fr; padding: 22px 18px; gap: 24px; }.game-detail .detail-cover { width: min(68%, 220px); }.detail-art-caption { font-size: 9px; }.detail-main { padding: 0; }.detail-main h1 { font-size: 32px; }
+  .detail-summary { font-size: 14px; }.detail-about { grid-template-columns: 1fr; gap: 24px; margin: 40px 0; }.detail-related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.detail-buttons .button { flex: 1; justify-content: center; padding: 13px 12px; }.game-detail h2 { font-size: 23px; }
+}

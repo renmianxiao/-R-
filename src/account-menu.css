@@ -1,0 +1,23 @@
+.account-menu-root { position: relative; flex-shrink: 0; }
+.history-storage-notice { padding: 14px 0; color: #e6be8c; font-size: 12px; line-height: 1.7; }
+.account-dropdown { position: absolute; top: calc(100% + 14px); right: 0; width: 276px; max-width: calc(100vw - 32px); padding: 18px; color: var(--ink); background: #1a1b15; border: 1px solid #d7f36a30; border-radius: 8px; box-shadow: 0 18px 50px #0008; }
+.account-menu-identity { display: flex; align-items: center; gap: 12px; padding-bottom: 17px; }
+.account-menu-avatar { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid #d7f36a45; border-radius: 50%; background: #d7f36a0e; color: var(--lime); font-size: 18px; }
+.account-menu-identity > div { min-width: 0; }.account-menu-identity strong { display: block; font-size: 14px; }.account-menu-identity small { display: block; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; color: var(--muted); font-size: 11px; }
+.account-menu-points { display: flex; align-items: center; gap: 9px; padding: 13px 10px; border: 1px solid #d7f36a24; border-radius: 5px; background: #d7f36a06; font-size: 12px; }
+.account-menu-points > span { display: flex; gap: 7px; align-items: center; }.account-menu-points svg { color: var(--lime); }.account-menu-points strong { margin-left: auto; color: var(--lime); font: 18px var(--mono); }.account-menu-points small { color: #969684; font-size: 10px; }
+.account-dropdown nav { display: grid; gap: 3px; padding: 12px 0; }.account-dropdown nav a,.account-dropdown nav button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px 9px; border: 0; border-radius: 4px; text-align: left; color: #d2d0c4; background: transparent; font-size: 12px; cursor: pointer; }.account-dropdown nav > * > span { flex: 1; }.account-dropdown nav a:hover,.account-dropdown nav button:not(:disabled):hover { background: #d7f36a0a; color: var(--lime); }.account-dropdown nav button:disabled { color: #7f8173; cursor: not-allowed; }.account-dropdown nav small { font-size: 10px; }
+.account-dropdown nav .account-menu-checkin { color: var(--lime); background: #d7f36a0a; border: 1px solid #d7f36a25; }
+.account-dropdown nav .account-menu-checkin.is-checked { color: #bdce92; background: #d7f36a05; border-color: #d7f36a15; cursor: default; }
+.account-menu-daily { margin: -1px 0 15px; padding: 0 9px; }
+.account-menu-daily p { margin: 0 0 5px; color: #b4b8a4; font-size: 11px; line-height: 1.7; }
+.account-menu-daily p.is-lucky { color: var(--lime); }
+.account-menu-daily p.is-zero { color: #d8ba91; }
+.account-menu-daily > small { display: block; color: #919582; font-size: 10px; line-height: 1.8; }
+.account-menu-points-error { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 10px; margin: 0 0 14px; padding: 10px; border-left: 2px solid #d99b86; background: #e6a89c06; }
+.account-menu-points-error p { flex: 1 1 150px; margin: 0; overflow-wrap: anywhere; color: #e6a89c; font-size: 11px; line-height: 1.7; }
+.account-menu-points-error button { padding: 3px 0; border: 0; color: #d8dbcb; background: transparent; font-size: 10px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.account-menu-points-error button:disabled { opacity: .5; cursor: wait; }
+.account-button:disabled { opacity: .6; cursor: wait; }
+.account-menu-logout { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; padding: 11px; border: 1px solid var(--line); border-radius: 4px; color: #aaa99b; background: transparent; font-size: 12px; cursor: pointer; }.account-menu-logout:hover { color: var(--ink); border-color: #aaa99b55; }.account-menu-error { margin: 12px 0 0; color: #e6a89c; font-size: 12px; line-height: 1.7; }
+@media (max-width: 680px) { .account-dropdown { position: fixed; top: 76px; right: 18px; max-height: calc(100dvh - 92px); overflow-y: auto; } }
